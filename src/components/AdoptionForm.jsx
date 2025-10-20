@@ -15,7 +15,7 @@ export default function AdoptionForm() {
   const navigate = useNavigate();
 
   const petName = location.state?.petName || "";
-  const petId = location.state?.petId; // **Important: pass this to backend**
+  const petId = location.state?.petId;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -41,26 +41,8 @@ export default function AdoptionForm() {
       return;
     }
 
-    setLoading(true);
-    try {
-      // **Send petId along with adopter info**
-      const payload = { ...formData, petId };
-
-      const res = await axios.post(
-        "http://localhost:3000/api/user/petdonations/adoptpet",
-        payload
-      );
-
-      if (res.status === 201) {
-        alert(`✅ Payment Successful!\nYou have adopted ${formData.petName}.`);
-        navigate("/adoption");
-      }
-    } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || "Failed to submit adoption form.");
-    } finally {
-      setLoading(false);
-    }
+    // ✅ Navigate to payment portal, send data using state
+    navigate("/payment", { state: { ...formData, petId } });
   };
 
   return (
@@ -107,57 +89,19 @@ export default function AdoptionForm() {
           onSubmit={handleSubmit}
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
-          <TextField
-            label="Full Name"
-            name="name"
-            fullWidth
-            required
-            value={formData.name}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Email Address"
-            name="email"
-            type="email"
-            fullWidth
-            required
-            value={formData.email}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Phone Number"
-            name="phone"
-            fullWidth
-            required
-            value={formData.phone}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Full Address"
-            name="address"
-            fullWidth
-            multiline
-            rows={3}
-            required
-            value={formData.address}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Pet Name / ID"
-            name="petName"
-            fullWidth
-            value={formData.petName}
-            disabled
-          />
+          <TextField label="Full Name" name="name" fullWidth required value={formData.name} onChange={handleChange} />
+          <TextField label="Email Address" name="email" type="email" fullWidth required value={formData.email} onChange={handleChange} />
+          <TextField label="Phone Number" name="phone" fullWidth required value={formData.phone} onChange={handleChange} />
+          <TextField label="Full Address" name="address" fullWidth multiline rows={3} required value={formData.address} onChange={handleChange} />
+          <TextField label="Pet Name / ID" name="petName" fullWidth value={formData.petName} disabled />
 
           <Divider sx={{ my: 2 }} />
           <Typography variant="h6" color="text.secondary">
             💳 Payment (Demo)
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Enter anything to simulate payment.
+            Click below to proceed to dummy payment.
           </Typography>
-          <TextField label="Card / UPI / Demo" fullWidth />
 
           <Button
             variant="contained"
@@ -165,10 +109,9 @@ export default function AdoptionForm() {
             fullWidth
             size="large"
             type="submit"
-            disabled={loading}
             sx={{ borderRadius: "12px", py: 1.5, fontWeight: "bold", textTransform: "none", fontSize: "1rem" }}
           >
-            {loading ? "Processing..." : "Submit & Pay"}
+            Proceed to Pay
           </Button>
 
           <Button

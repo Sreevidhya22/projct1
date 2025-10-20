@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use("/api", rootRouter);
 
 app.get("/", (req, res) => res.send("🐾 OnePet Backend Running!"));
+//mongodb+srv://sreevidhyavenugopal89_db_user:Bzc1SYEv8wB6GUK@cluster0.1zapxuz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 mongoose.connect("mongodb+srv://sreevidhyavenugopal89_db_user:Bzc1SYEv8wB6GUKF@cluster0.1zapxuz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
   .then(() => {

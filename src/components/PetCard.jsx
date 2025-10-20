@@ -47,7 +47,7 @@ function PetCard({ pet }) {
         <p><b>Date:</b> {pet.date}</p>
         {pet.contactPerson && (
           <p>
-            <b>{pet.status === "Lost" ? "Owner" : "Founder"}:</b>{" "}
+            <b>{pet.status === "Lost" ? "Owner" : "Owner"}:</b>{" "}
             {pet.contactPerson}
           </p>
         )}

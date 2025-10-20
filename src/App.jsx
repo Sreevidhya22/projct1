@@ -18,6 +18,8 @@ import VeterianHomePage from './components/VeterianHomePage'
 import VetAppointment from './components/VetAppointment'
 import AdminDashboard from './components/AdminDashboard'
 import VetProfile from './components/VetProfile'
+import VaccinationPP from './components/Vaccinationpp'
+import PaymentPortal from './components/Paymentportal'
 
 
 function App() {
@@ -44,6 +46,8 @@ function App() {
           <Route path='/Vetconsult' element={<VetConsultation/>}/>
           <Route path='/VetProfile' element={<VetProfile/>}/>
           <Route path='/Appoint' element={<VetAppointment/>}/>
+          <Route path = 'Vaccinationpp' element={<VaccinationPP/>}/>
+         <Route path="/payment" element={<PaymentPortal />} />
          </Routes>
       </div>
     </>

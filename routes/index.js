@@ -7,6 +7,7 @@ const vetRoutes = require("./vet/vetRoutes");
 const petDonationRoutes = require("./user/petDonationRoutes");
 const appointmentRoutes = require("./user/appointRoutes");
 const adminRoutes = require("./admin/adminroutes");
+const razorpay = require("./Razorpay")
 
 rootRouter.use("/admin", adminRoutes);
 // User routes
@@ -22,9 +23,15 @@ rootRouter.use("/user/petdonations", petDonationRoutes);
 rootRouter.use("/user/appointments", appointmentRoutes);
 rootRouter.use("/vet/appointments", appointmentRoutes);
 const threadRoutes = require("./threadRoutes");
-
+const vaccinationRoutes = require("./vaccinationRoutes")
+const vetvacRoutes = require("./vacRoutes")
+const petRoutes = require("./petRoutes")
 // Threads routes
 rootRouter.use("/user/threads", threadRoutes);
+rootRouter.use("/user/vaccinations", vaccinationRoutes);
+rootRouter.use("/vet/vaccinations",vetvacRoutes);
+rootRouter.use("/user/lostFound",petRoutes);
+rootRouter.use("/user/payment",razorpay);
 
 
 

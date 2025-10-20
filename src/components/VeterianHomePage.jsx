@@ -20,6 +20,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import VaccinesIcon from "@mui/icons-material/LocalHospital"; // for vaccination
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import LogoutIcon from "@mui/icons-material/Logout";
 
@@ -40,12 +41,6 @@ export default function VeterianHomePage() {
     } else {
       navigate("/Login");
     }
-
-    // Optional: fetch stats from backend if available
-    // fetch("http://localhost:3000/api/vet/stats")
-    //   .then((res) => res.json())
-    //   .then((data) => setStats(data))
-    //   .catch(() => {});
   }, [navigate]);
 
   const handleLogout = () => {
@@ -98,14 +93,14 @@ export default function VeterianHomePage() {
             color="text.secondary"
             sx={{ mb: 4 }}
           >
-            Manage your appointments, view pet health records, and connect with pet owners 🐾
+            Manage your appointments, vaccination schedules, and connect with pet owners 🐾
           </Typography>
 
           <Grid container spacing={3}>
             {/* Left: Cards */}
             <Grid item xs={12} md={6}>
               <Grid container spacing={2}>
-                {/* Appointments Card */}
+                {/* View Appointments */}
                 <Grid item xs={12}>
                   <Card
                     sx={{
@@ -132,6 +127,41 @@ export default function VeterianHomePage() {
                         variant="contained"
                         sx={{ mt: 2, borderRadius: "25px", px: 3 }}
                         onClick={() => navigate("/Appoint")}
+                      >
+                        Open
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+
+                {/* View Vaccination Appointments */}
+                <Grid item xs={12}>
+                  <Card
+                    sx={{
+                      borderRadius: 3,
+                      boxShadow: 4,
+                      "&:hover": { transform: "scale(1.03)" },
+                      transition: "0.3s",
+                      textAlign: "center",
+                      background:
+                        "linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%)",
+                    }}
+                  >
+                    <CardContent>
+                      <VaccinesIcon
+                        sx={{ fontSize: 40, color: "orange", mb: 1 }}
+                      />
+                      <Typography variant="h6" fontWeight="bold">
+                        Vaccination Appointments
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Check and manage vaccination schedules for pets.
+                      </Typography>
+                      <Button
+                        variant="contained"
+                        color="warning"
+                        sx={{ mt: 2, borderRadius: "25px", px: 3 }}
+                        onClick={() => navigate("/Vaccinationpp")}
                       >
                         Open
                       </Button>
@@ -205,7 +235,7 @@ export default function VeterianHomePage() {
                       cy="50%"
                       outerRadius={80}
                       fill="#8884d8"
-                      label={false} // disables numbers on slices
+                      label={false}
                     >
                       {data.map((entry, index) => (
                         <Cell
@@ -214,7 +244,6 @@ export default function VeterianHomePage() {
                         />
                       ))}
                     </Pie>
-                    {/* Tooltip shows only slice name */}
                     <Tooltip
                       content={({ payload }) => {
                         if (payload && payload.length) {

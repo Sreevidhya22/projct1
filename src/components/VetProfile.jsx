@@ -25,7 +25,7 @@ export default function VetProfile() {
   const [message, setMessage] = useState("");
 
   // 🔹 Get vetId from localStorage (stored after login)
-  const vetId = localStorage.getItem("vetId");
+  const vetId = localStorage.getItem("userId");
 
   // 🔹 Fetch Vet Data
   useEffect(() => {

@@ -24,9 +24,30 @@ function PetDonationForm({ setPets }) {
     }
   };
 
+  const validate = () => {
+    if (!form.name.trim()) {
+      alert("Pet Name is required");
+      return false;
+    }
+    if (!form.type.trim()) {
+      alert("Pet Type is required");
+      return false;
+    }
+    
+    if (!form.location.trim()) {
+      alert("Location is required");
+      return false;
+    }
+    if (form.contact && !/^\d{10}$/.test(form.contact)) {
+      alert("Contact number must be 10 digits");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.type || !form.location) return;
+    if (!validate()) return;
 
     const newPet = {
       ...form,
@@ -42,7 +63,6 @@ function PetDonationForm({ setPets }) {
 
       if (res.ok) {
         const data = await res.json();
-        // Add new pet to UI
         setPets((prev) => [data, ...prev]);
         alert("Pet donation submitted successfully!");
       } else {
@@ -50,9 +70,9 @@ function PetDonationForm({ setPets }) {
       }
     } catch (error) {
       console.error("Error submitting donation:", error);
+      alert("Something went wrong. Please try again.");
     }
 
-    // Reset form
     setForm({
       name: "",
       type: "",

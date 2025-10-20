@@ -14,7 +14,6 @@ export default function Registrationpage() {
   const navigate = useNavigate();
   const [role, setRole] = useState("user");
 
-  // initialize with empty strings to avoid uncontrolled issues
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,7 +23,10 @@ export default function Registrationpage() {
     location: "",
   });
 
-  // proper controlled input handler
+  // validation error messages
+  const [errors, setErrors] = useState({});
+
+  // input handler
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -33,18 +35,35 @@ export default function Registrationpage() {
     }));
   };
 
+  // simple regex validation
+  const validate = () => {
+    let tempErrors = {};
+
+    // email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email))
+      tempErrors.email = "Enter a valid email address";
+
+    // phone validation (10 digits only)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(formData.phone))
+      tempErrors.phone = "Enter a valid 10-digit phone number";
+
+    // password check
+    if (formData.password.trim() === "")
+      tempErrors.password = "Password is required";
+    else if (formData.password !== formData.confirmPassword)
+      tempErrors.confirmPassword = "Passwords do not match";
+
+    setErrors(tempErrors);
+
+    return Object.keys(tempErrors).length === 0; // true if no errors
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password.trim() === "" || formData.confirmPassword.trim() === "") {
-      alert("⚠️ Please enter a password.");
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      alert("⚠️ Passwords do not match!");
-      return;
-    }
+    if (!validate()) return; // stop if invalid
 
     try {
       const baseUrl = "http://localhost:3000/api";
@@ -69,7 +88,11 @@ export default function Registrationpage() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(`✅ Registered successfully as ${role === "user" ? "Adopter" : "Veterinarian"}!`);
+        alert(
+          `✅ Registered successfully as ${
+            role === "user" ? "Adopter" : "Veterinarian"
+          }!`
+        );
         setFormData({
           name: "",
           email: "",
@@ -147,6 +170,8 @@ export default function Registrationpage() {
             fullWidth
             margin="normal"
             required
+            error={!!errors.email}
+            helperText={errors.email}
           />
 
           <TextField
@@ -158,6 +183,8 @@ export default function Registrationpage() {
             fullWidth
             margin="normal"
             required
+            error={!!errors.password}
+            helperText={errors.password}
           />
 
           <TextField
@@ -169,6 +196,8 @@ export default function Registrationpage() {
             fullWidth
             margin="normal"
             required
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword}
           />
 
           <TextField
@@ -178,6 +207,9 @@ export default function Registrationpage() {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            required
+            error={!!errors.phone}
+            helperText={errors.phone}
           />
 
           <TextField
@@ -226,7 +258,11 @@ export default function Registrationpage() {
             Already have an account?{" "}
             <Link
               to="/login"
-              style={{ color: "#1976d2", textDecoration: "none", fontWeight: "bold" }}
+              style={{
+                color: "#1976d2",
+                textDecoration: "none",
+                fontWeight: "bold",
+              }}
             >
               Login here
             </Link>

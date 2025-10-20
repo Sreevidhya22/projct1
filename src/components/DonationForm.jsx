@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -28,7 +29,7 @@ function Donation() {
     }
 
     try {
-      await axios.post("http://localhost:8000/api/donate/", formData, {
+      await axios.post("http://localhost:3000/api/donate/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       alert("Pet donation submitted!");
@@ -42,7 +43,7 @@ function Donation() {
 
   const fetchPets = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/donate/");
+      const res = await axios.get("http://localhost:3000/api/donate/");
       setPets(res.data);
     } catch (err) {
       console.error(err);

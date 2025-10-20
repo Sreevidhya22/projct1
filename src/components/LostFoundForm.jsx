@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 
-function LostFoundForm({ setPets }) {
+function LostFoundForm({ fetchPets }) {
   const [form, setForm] = useState({
     name: "",
     type: "",
@@ -8,8 +9,11 @@ function LostFoundForm({ setPets }) {
     location: "",
     contactPerson: "",
     contact: "",
+    email: "",
     img: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -24,27 +28,33 @@ function LostFoundForm({ setPets }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.type || !form.location) return;
+    if (!form.name || !form.type || !form.location) return alert("Please fill all required fields!");
 
-    const newPet = {
-      id: Date.now(),
-      ...form,
-      date: new Date().toISOString().split("T")[0],
-    };
+    setLoading(true);
 
-    setPets((prev) => [newPet, ...prev]);
-    setForm({
-      name: "",
-      type: "",
-      status: "Lost",
-      location: "",
-      contactPerson: "",
-      contact: "",
-      img: "",
-    });
-    document.getElementById("imgInput").value = "";
+    try {
+      await axios.post("http://localhost:3000/api/user/lostFound", form);
+      alert("Pet added successfully!");
+      setForm({
+        name: "",
+        type: "",
+        status: "Lost",
+        location: "",
+        contactPerson: "",
+        contact: "",
+        email: "",
+        img: "",
+      });
+      document.getElementById("imgInput").value = "";
+      fetchPets(); // refresh pet list in parent
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add pet. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -86,7 +96,7 @@ function LostFoundForm({ setPets }) {
         style={{ padding: "8px", flex: "1" }}
       >
         <option value="Lost">Lost</option>
-        <option value="Found">Found</option>
+        
       </select>
       <input
         type="text"
@@ -100,7 +110,7 @@ function LostFoundForm({ setPets }) {
       <input
         type="text"
         name="contactPerson"
-        placeholder={form.status === "Lost" ? "Owner Name" : "Founder Name"}
+        placeholder={form.status === "Lost" ? "Owner Name" : "Finder Name"}
         value={form.contactPerson}
         onChange={handleChange}
         style={{ padding: "8px", flex: "1" }}
@@ -114,6 +124,15 @@ function LostFoundForm({ setPets }) {
         style={{ padding: "8px", flex: "1" }}
       />
       <input
+        type="email"
+        name="email"
+        placeholder="Email (for verification)"
+        value={form.email}
+        onChange={handleChange}
+        style={{ padding: "8px", flex: "1" }}
+        required
+      />
+      <input
         type="file"
         id="imgInput"
         name="img"
@@ -124,6 +143,7 @@ function LostFoundForm({ setPets }) {
 
       <button
         type="submit"
+        disabled={loading}
         style={{
           backgroundColor: "#007bff",
           color: "#fff",
@@ -131,9 +151,10 @@ function LostFoundForm({ setPets }) {
           borderRadius: "6px",
           padding: "8px 15px",
           cursor: "pointer",
+          flex: "1",
         }}
       >
-        Post
+        {loading ? "Adding..." : "Post Pet"}
       </button>
     </form>
   );

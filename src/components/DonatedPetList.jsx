@@ -8,7 +8,7 @@ function DonatedPetsList() {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/donate/");
+        const res = await axios.get("http://localhost:3000/api/donate/");
         setPets(res.data);
       } catch (err) {
         console.error(err);
