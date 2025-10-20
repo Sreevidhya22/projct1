@@ -95,7 +95,7 @@ export default function PaymentPortal() {
       const order = await axios.post("http://localhost:3000/api/user/payment/create-order");
 
       const options = {
-        key: "rzp_test_EivibYYx3Swhyx", // your test key
+        key: "", // your test key
         amount: order.data.amount,
         currency: "INR",
         name: "Pet Adoption Center",
@@ -193,3 +193,4 @@ export default function PaymentPortal() {
     </Box>
   );
 }
+
